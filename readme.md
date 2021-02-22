@@ -7,28 +7,70 @@ Simple Python and shell scripts to run a fan based on CPU temperature for your R
 
 ## The Setup
 
-This setup uses GPIO pin 18 with an NPN Transistor (S8050). Wiring diagrams 
-for this setup are provided in the `wiring_diagrams` directory, with an image 
-of the most basic setup below.
+This setup uses GPIO pin 4 with an NPN Transistor.  
+This is intended for use with the RotorHazard PCB
 
-### Basic Wiring Diagram
+## Instalation
+To download the code onto your raspberry pi run the following:
+```
+cd ~
+sudo git clone https://github.com/Aaronsss/Raspberry-Pi-Fan-Control.git
+cd Raspberry-Pi-Fan-Control
+```
 
-![Raspberry Pi Fan Wiring Diagram](wiring_diagrams/basic.png)
+You may modify run-fan.py if you want to change the operation temperatures, the defaults (on at 40&deg;C and off at 39&deg;C) should suffice for most users.
+
+Remember if using RX5808 modules that you are measuring the raspberry pi temperature so it is best to turn on at a fairly low temperature.
+
+It is not recommended to change the turn off temperature to more than 2&deg;C from the turn on to help maintain a more stable temperature on the RX5808 modules
 
 ## Running on Boot
 
-Here's how to run this script automatically on boot:
-- Modify the shell script to ensure you have the correct path _run-fan.py_.
-- Make the files executable using _sudo chmod a+x run-fan.py_ and _sudo chmod a+x launcher.sh_.
-- Use crontab (or another method) to execute _launcher.sh_ on boot. 
+To configure the system to automatically start the fan program when booting up
 
-### Helpful Links
+Create a service file:
+```
+sudo nano /lib/systemd/system/pi-fan-control.service
+```
+with the following contents
+```
+[Unit]
+Description=Raspberry Pi Fan Control Service
+After=multi-user.target
 
-The code included in this repository is mainly the work of others, with some modification 
-and adaptations made to the code to document the approach. 
+[Service]
+WorkingDirectory=/home/pi/Raspberry-Pi-Fan-Control
+ExecStart=/usr/bin/python3 run-fan.py
 
-- [How to control a fan to cool the CPU of your RaspBerryPi](https://hackernoon.com/how-to-control-a-fan-to-cool-the-cpu-of-your-raspberrypi-3313b6e7f92c)
-- [Execute Script on Start Up](https://raspberrypi.stackexchange.com/questions/8734/execute-script-on-start-up)
+[Install]
+WantedBy=multi-user.target
+```
 
-Thanks to [@vollman-ariel](https://github.com/vollmann-ariel) for providing a 
-wiring diagram which includes an additional resistor. 
+save and exit (CTRL-X, Y, ENTER).
+
+Update permissions:
+
+```
+sudo chmod 644 /lib/systemd/system/pi-fan-control.service
+```
+Enable the service:
+```
+sudo systemctl daemon-reload
+sudo systemctl enable pi-fan-control.service
+sudo reboot
+```
+
+## Stopping the server service
+
+If the Pi Fan Control Service was started as a service during the boot, it may be stopped with a command like this:
+```
+sudo systemctl stop pi-fan-control
+```
+To disable the service (so it no longer runs when the system starts up), enter:
+```
+sudo systemctl disable pi-fan-control.service
+```
+To query the status of the service:
+```
+sudo systemctl status pi-fan-control.service
+```
