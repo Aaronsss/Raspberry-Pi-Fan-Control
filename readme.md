@@ -18,7 +18,7 @@ sudo git clone https://github.com/Aaronsss/Raspberry-Pi-Fan-Control.git
 cd Raspberry-Pi-Fan-Control
 ```
 
-You may modify run-fan.py if you want to change the operation temperatures, the defaults (on at 40&deg;C and off at 39&deg;C) should suffice for most users.
+You may modify run-fan.py if you want to change the operation temperatures, the defaults (on at 40&deg;C and off at 38&deg;C) should suffice for most users.
 
 Remember if using RX5808 modules that you are measuring the raspberry pi temperature so it is best to turn on at a fairly low temperature.
 

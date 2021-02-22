@@ -5,13 +5,12 @@ import RPi.GPIO as GPIO
 
 pin = 4  # The pin ID, edit here to change it
 maxTMP = 40  # The maximum temperature in Celsius after which we trigger the fan
-stopTMP = maxTMP - 1 # The temperature to deactivate the fan
+stopTMP = maxTMP - 2 # The temperature to deactivate the fan
 
 
 def setup():
     GPIO.setmode(GPIO.BCM)
     GPIO.setup(pin, GPIO.OUT)
-    fan_off()
     return ()
 
 
