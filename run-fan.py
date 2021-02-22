@@ -44,5 +44,5 @@ try:
     while True:
         get_temp()
         sleep(2)  # Read the temperature every 5 sec, increase or decrease this limit if you want
-except KeyboardInterrupt:  
+except:  
         fan_on()
