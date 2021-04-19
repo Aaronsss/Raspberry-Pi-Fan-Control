@@ -39,6 +39,7 @@ Description=Raspberry Pi Fan Control Service
 After=multi-user.target
 
 [Service]
+User=pi
 WorkingDirectory=/home/pi/Raspberry-Pi-Fan-Control
 ExecStart=/usr/bin/python3 run-fan.py
 
